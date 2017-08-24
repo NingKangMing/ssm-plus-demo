@@ -2,7 +2,6 @@ target
 */target/
 */*./target
 mybatis.log*
-*.settings/
 /.idea
 /logs
 /.externalToolBuilders
@@ -12,6 +11,5 @@ mybatis.log*
 .pom.xml.bak
 .tern-project
 .mymetadata
-*/*.classpath
 */bin
 *.MF
