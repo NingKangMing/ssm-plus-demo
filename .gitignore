@@ -1,0 +1,17 @@
+target
+*/target/
+*/*./target
+mybatis.log*
+*.settings/
+/.idea
+/logs
+/.externalToolBuilders
+/.myumldata
+/src/main/webapp/WEB-INF/classes
+# Eclipse project files
+.pom.xml.bak
+.tern-project
+.mymetadata
+*/*.classpath
+*/bin
+*.MF

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wholesmart.mapper.WeatherMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wholesmart.entity.Weather">
+		<id column="id" property="id" />
+		<result column="city" property="city" />
+		<result column="weather" property="weather" />
+		<result column="temp" property="temp" />
+		<result column="humidity" property="humidity" />
+		<result column="current_temp" property="currentTemp" />
+		<result column="wind" property="wind" />
+		<result column="AQI" property="aqi" />
+		<result column="PM25" property="pm25" />
+		<result column="remark" property="remark" />
+		<result column="collect_time" property="collectTime" />
+		<result column="original_id" property="originalId" />
+		<result column="input_user" property="inputUser" />
+		<result column="input_time" property="inputTime" />
+		<result column="spare0" property="spare0" />
+		<result column="spare1" property="spare1" />
+		<result column="spare2" property="spare2" />
+		<result column="spare3" property="spare3" />
+		<result column="spare4" property="spare4" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, city, weather, temp, humidity, current_temp AS currentTemp, wind, AQI AS aqi, PM25 AS pm25, remark, collect_time AS collectTime, original_id AS originalId, input_user AS inputUser, input_time AS inputTime, spare0, spare1, spare2, spare3, spare4
+    </sql>
+
+</mapper>

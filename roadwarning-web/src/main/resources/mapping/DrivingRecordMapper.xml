@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wholesmart.mapper.DrivingRecordMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wholesmart.entity.DrivingRecord">
+		<id column="id" property="id" />
+		<result column="car_id" property="carId" />
+		<result column="collect_time" property="collectTime" />
+		<result column="micro_id" property="microId" />
+		<result column="location" property="location" />
+		<result column="lng" property="lng" />
+		<result column="lat" property="lat" />
+		<result column="spare0" property="spare0" />
+		<result column="spare1" property="spare1" />
+		<result column="spare2" property="spare2" />
+		<result column="spare3" property="spare3" />
+		<result column="spare4" property="spare4" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, car_id AS carId, collect_time AS collectTime, micro_id AS microId, location, lng, lat, spare0, spare1, spare2, spare3, spare4
+    </sql>
+
+</mapper>

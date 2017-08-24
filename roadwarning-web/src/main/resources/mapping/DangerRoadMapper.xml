@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wholesmart.mapper.DangerRoadMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wholesmart.entity.DangerRoad">
+		<id column="id" property="id" />
+		<result column="org_name" property="orgName" />
+		<result column="village" property="village" />
+		<result column="road_name" property="roadName" />
+		<result column="count_time" property="countTime" />
+		<result column="road_type" property="roadType" />
+		<result column="road_mileage" property="roadMileage" />
+		<result column="road_ownership" property="roadOwnership" />
+		<result column="road_origin" property="roadOrigin" />
+		<result column="road_finsh" property="roadFinsh" />
+		<result column="village_group" property="villageGroup" />
+		<result column="unsecurity" property="unsecurity" />
+		<result column="security" property="security" />
+		<result column="uncaution" property="uncaution" />
+		<result column="caution" property="caution" />
+		<result column="load_grade1" property="loadGrade1" />
+		<result column="load_grade2" property="loadGrade2" />
+		<result column="load_grade3" property="loadGrade3" />
+		<result column="load_grade4" property="loadGrade4" />
+		<result column="load_type_cement" property="loadTypeCement" />
+		<result column="load_type_asphalt" property="loadTypeAsphalt" />
+		<result column="load_type_galet" property="loadTypeGalet" />
+		<result column="load_type_other" property="loadTypeOther" />
+		<result column="load_grade_other" property="loadGradeOther" />
+		<result column="iscross" property="iscross" />
+		<result column="remark" property="remark" />
+		<result column="collect_time" property="collectTime" />
+		<result column="original_id" property="originalId" />
+		<result column="input_user" property="inputUser" />
+		<result column="input_time" property="inputTime" />
+		<result column="spare0" property="spare0" />
+		<result column="spare1" property="spare1" />
+		<result column="spare2" property="spare2" />
+		<result column="spare3" property="spare3" />
+		<result column="spare4" property="spare4" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, org_name AS orgName, village, road_name AS roadName, count_time AS countTime, road_type AS roadType, road_mileage AS roadMileage, road_ownership AS roadOwnership, road_origin AS roadOrigin, road_finsh AS roadFinsh, village_group AS villageGroup, unsecurity, security, uncaution, caution, load_grade1 AS loadGrade1, load_grade2 AS loadGrade2, load_grade3 AS loadGrade3, load_grade4 AS loadGrade4, load_type_cement AS loadTypeCement, load_type_asphalt AS loadTypeAsphalt, load_type_galet AS loadTypeGalet, load_type_other AS loadTypeOther, load_grade_other AS loadGradeOther, iscross, remark, collect_time AS collectTime, original_id AS originalId, input_user AS inputUser, input_time AS inputTime, spare0, spare1, spare2, spare3, spare4
+    </sql>
+
+</mapper>

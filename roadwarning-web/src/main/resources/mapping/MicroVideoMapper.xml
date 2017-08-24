@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wholesmart.mapper.MicroVideoMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wholesmart.entity.MicroVideo">
+		<result column="id" property="id" />
+		<result column="num" property="num" />
+		<result column="name" property="name" />
+		<result column="url" property="url" />
+		<result column="is_ptz" property="isPtz" />
+		<result column="decs" property="decs" />
+		<result column="dept" property="dept" />
+		<result column="linkman" property="linkman" />
+		<result column="phone" property="phone" />
+		<result column="lng" property="lng" />
+		<result column="lat" property="lat" />
+		<result column="spare0" property="spare0" />
+		<result column="spare1" property="spare1" />
+		<result column="spare2" property="spare2" />
+		<result column="spare3" property="spare3" />
+		<result column="spare4" property="spare4" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, num, name, url, is_ptz AS isPtz, decs, dept, linkman, phone, lng, lat, spare0, spare1, spare2, spare3, spare4
+    </sql>
+
+</mapper>

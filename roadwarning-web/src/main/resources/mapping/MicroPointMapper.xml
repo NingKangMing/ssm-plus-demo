@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wholesmart.mapper.MicroPointMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wholesmart.entity.MicroPoint">
+		<id column="id" property="id" />
+		<result column="num" property="num" />
+		<result column="name" property="name" />
+		<result column="ip" property="ip" />
+		<result column="mac" property="mac" />
+		<result column="model" property="model" />
+		<result column="local_number" property="localNumber" />
+		<result column="address" property="address" />
+		<result column="road_id" property="roadId" />
+		<result column="road_name" property="roadName" />
+		<result column="area_id" property="areaId" />
+		<result column="lng" property="lng" />
+		<result column="lat" property="lat" />
+		<result column="temp" property="temp" />
+		<result column="hum" property="hum" />
+		<result column="rainfall" property="rainfall" />
+		<result column="visibility" property="visibility" />
+		<result column="wind" property="wind" />
+		<result column="weather" property="weather" />
+		<result column="video_url" property="videoUrl" />
+		<result column="led_msg" property="ledMsg" />
+		<result column="remark" property="remark" />
+		<result column="collect_time" property="collectTime" />
+		<result column="original_id" property="originalId" />
+		<result column="input_user" property="inputUser" />
+		<result column="input_time" property="inputTime" />
+		<result column="更新时间" property="更新时间" />
+		<result column="spare0" property="spare0" />
+		<result column="spare1" property="spare1" />
+		<result column="spare2" property="spare2" />
+		<result column="spare3" property="spare3" />
+		<result column="spare4" property="spare4" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, num, name, ip, mac, model, local_number AS localNumber, address, road_id AS roadId, road_name AS roadName, area_id AS areaId, lng, lat, temp, hum, rainfall, visibility, wind, weather, video_url AS videoUrl, led_msg AS ledMsg, remark, collect_time AS collectTime, original_id AS originalId, input_user AS inputUser, input_time AS inputTime, 更新时间, spare0, spare1, spare2, spare3, spare4
+    </sql>
+
+</mapper>

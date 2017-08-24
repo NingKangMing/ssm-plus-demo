@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wholesmart.mapper.OperaCarMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wholesmart.entity.OperaCar">
+		<id column="id" property="id" />
+		<result column="plate_number" property="plateNumber" />
+		<result column="device_number" property="deviceNumber" />
+		<result column="device_type" property="deviceType" />
+		<result column="device_date" property="deviceDate" />
+		<result column="state" property="state" />
+		<result column="owner_name" property="ownerName" />
+		<result column="idcard" property="idcard" />
+		<result column="contact_way" property="contactWay" />
+		<result column="car_type" property="carType" />
+		<result column="limit_number" property="limitNumber" />
+		<result column="opera_plate" property="operaPlate" />
+		<result column="opera_number" property="operaNumber" />
+		<result column="color" property="color" />
+		<result column="opera_time" property="operaTime" />
+		<result column="driver" property="driver" />
+		<result column="driver_idcard" property="driverIdcard" />
+		<result column="insure_company" property="insureCompany" />
+		<result column="com_insure_time" property="comInsureTime" />
+		<result column="seat_insure_time" property="seatInsureTime" />
+		<result column="traffic_insure_time" property="trafficInsureTime" />
+		<result column="remark" property="remark" />
+		<result column="collect_time" property="collectTime" />
+		<result column="original_id" property="originalId" />
+		<result column="input_user" property="inputUser" />
+		<result column="input_time" property="inputTime" />
+		<result column="spare0" property="spare0" />
+		<result column="spare1" property="spare1" />
+		<result column="spare2" property="spare2" />
+		<result column="spare3" property="spare3" />
+		<result column="spare4" property="spare4" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, plate_number AS plateNumber, device_number AS deviceNumber, device_type AS deviceType, device_date AS deviceDate, state, owner_name AS ownerName, idcard, contact_way AS contactWay, car_type AS carType, limit_number AS limitNumber, opera_plate AS operaPlate, opera_number AS operaNumber, color, opera_time AS operaTime, driver, driver_idcard AS driverIdcard, insure_company AS insureCompany, com_insure_time AS comInsureTime, seat_insure_time AS seatInsureTime, traffic_insure_time AS trafficInsureTime, remark, collect_time AS collectTime, original_id AS originalId, input_user AS inputUser, input_time AS inputTime, spare0, spare1, spare2, spare3, spare4
+    </sql>
+
+</mapper>
