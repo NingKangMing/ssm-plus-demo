@@ -2,10 +2,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.wholesmart</groupId>
-    <artifactId>roadwarning</artifactId>
+    <artifactId>ssmplus-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>roadwarning-service</artifactId>
+  <artifactId>example-service</artifactId>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -13,7 +13,7 @@
     <!-- 依赖道路系统dao 依赖具有传递性，dao依赖了通用工具包 因此不需要再引入通用工具包-->
 	<dependency>
 	<groupId>com.wholesmart</groupId>
-	 <artifactId>roadwarning-dao</artifactId>
+	 <artifactId>example-dao</artifactId>
 	 <version>${roadwarning.version}</version>
 	</dependency>
   </dependencies>

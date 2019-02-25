@@ -2,12 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.wholesmart</groupId>
-	<artifactId>roadwarning</artifactId>
+	<artifactId>ssmplus-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>roadwarningWeb</name>
+	<name>ssmplus-demo</name>
 	<modules>
-		<module>common-util</module><!-- 这里写所有项目都通用的工具 -->
+		<!-- <module>common-util</module> --><!-- 这里写所有项目都通用的工具 -->
 		<module>roadwarning-dao</module><!-- 道路系统的dao接口和pojo类 避免模块过于小 pojo不单独划分模块了 -->
 		<module>roadwarning-service</module><!-- 道路系统的服务接口 -->
 		<module>roadwarning-web</module><!-- 道路系统的控制器 提供对外的接口 -->

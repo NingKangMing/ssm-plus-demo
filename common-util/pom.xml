@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.wholesmart</groupId>
-		<artifactId>roadwarning</artifactId>
+		<artifactId>ssmplus-demo</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<!--为com.wholesmart组提供项目共享工具包  非通用工具类请不要写到该工程模块 -->
-	<artifactId>common-util</artifactId><!-- groupId和version默认从父模块继承 -->
+	<artifactId>example-util</artifactId><!-- groupId和version默认从父模块继承 -->
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties> 
