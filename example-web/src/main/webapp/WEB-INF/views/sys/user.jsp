@@ -9,7 +9,7 @@
 <body>
 <script>
     function toList() {
-        window.location.href = '${ctx}/user/list';
+        window.location.href = '${ctx}/user/list.do';
     }
 </script>
 <div class="container">
@@ -36,7 +36,6 @@
                             <td>${user.id}</td>
                             <td>${user.username}</td>
                             <td>${user.age}</td>
-                            <td>${user.inputTime}</td>
                             <td>
                                 <a href="javascript:void(0);" onclick="preSave('${user.id}')" title="编辑">
                                     <i class="glyphicon glyphicon-edit"></i>
@@ -56,16 +55,16 @@
 <script>
     function preSave(id) {
         if (id == undefined || id == null || id == '') {
-            window.location.href = '${ctx}/user/preSave';
+            window.location.href = '${ctx}/user/preSave.do';
         } else {
-            window.location.href = '${ctx}/user/preSave?id=' + id;
+            window.location.href = '${ctx}/user/preSave.do?id=' + id;
         }
     }
 
     function del(id) {
         $.ajax({
             type: 'POST',
-            url: '${ctx}/user/delete',
+            url: '${ctx}/user/delete.do',
             data: {
                 id: id
             },

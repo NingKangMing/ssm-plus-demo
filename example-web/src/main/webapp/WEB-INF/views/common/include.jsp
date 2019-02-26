@@ -11,6 +11,6 @@
 
 <script>
     function toIndex() {
-        window.location.href = '${ctx}/account/index';
+        window.location.href = '${ctx}/account/index.do';
     }
 </script>

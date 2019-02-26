@@ -10,7 +10,7 @@
 <body>
 <script>
     function toList() {
-        window.location.href = '${ctx}/user/list';
+        window.location.href = '${ctx}/user/list.do';
     }
 </script>
 <div class="container">
@@ -36,7 +36,7 @@
     function save() {
         $.ajax({
             type: 'POST',
-            url: '${ctx}/user/save',
+            url: '${ctx}/user/save.do',
             data: $('#form').serialize(),
             dataType: 'json',
             success: function (result) {

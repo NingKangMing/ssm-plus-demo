@@ -9,7 +9,7 @@
 </head>
 <body>
    这是主页！！！！！！.
-   <a href="${ctx}/user/list">用户管理列表</a>
+   <a href="${ctx}/user/list.do">用户管理列表</a>
    <img alt="..." src="${ctx}/images/1.jpg">
 </body>
 </html>
