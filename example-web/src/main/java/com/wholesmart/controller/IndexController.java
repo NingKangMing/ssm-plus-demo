@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
-import com.wordnik.swagger.annotations.ApiOperation;
+
+import io.swagger.annotations.ApiOperation;
 
 /** 
  * 
@@ -43,7 +44,7 @@ public class IndexController extends BaseController{
 	@RequestMapping("/")
 	public String defaultPage() {
 
-		return "redirect:/index";
+		return "redirect:/account/index";
 	}
 	
 	@ApiOperation(value="测试接口说明",httpMethod="GET", response =ModelAndView.class,notes="接口发布说明")

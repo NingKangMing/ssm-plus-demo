@@ -8,7 +8,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-   这是主页！！！！！！
+   这是主页！！！！！！.
    <a href="${ctx}/user/list">用户管理列表</a>
+   <img alt="..." src="${ctx}/images/1.jpg">
 </body>
 </html>

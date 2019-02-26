@@ -13,10 +13,6 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
 	<!-- 自动扫描 -->
 	<context:component-scan base-package="com.wholesmart.controller" />
 
-	<bean class="com.wholesmart.controller.SwaggerConfig" />
-	<!-- swagger -->
-	<bean id="springSwaggerConfig"
-		class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
 	<!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
 	<bean id="fastJsonHttpMessageConverter"
 		class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
@@ -79,6 +75,14 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
 				class="com.wholesmart.common.util.spring.UTF8StringHttpMessageConverter" />
 		</mvc:message-converters>
 	</mvc:annotation-driven>
+	<!-- 静态资源配置 -->
+	<mvc:resources mapping="/api/**" location="/api/"
+		cache-period="31556926" /><!-- swagger 自定义模板 -->
+	<mvc:resources mapping="/static/**" location="/static/" />
+	<mvc:resources location="classpath:/META-INF/resources/"
+		mapping="swagger-ui.html" />
+	<mvc:resources location="classpath:/META-INF/resources/webjars/"
+		mapping="/webjars/**" />
 
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

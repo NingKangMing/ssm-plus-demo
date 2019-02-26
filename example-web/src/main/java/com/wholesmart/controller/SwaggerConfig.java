@@ -1,60 +1,80 @@
 package com.wholesmart.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
-import com.mangofactory.swagger.models.dto.ApiInfo;
-import com.mangofactory.swagger.plugin.EnableSwagger;
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.ModelRef;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.service.Parameter;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /** 
  * 
  * @author kangming.ning [ningkangming@126.com] 
  * 
  */
-@EnableWebMvc
 @Configuration
-@EnableSwagger
-public class SwaggerConfig {
-   
-	private SpringSwaggerConfig springSwaggerConfig;
+@EnableSwagger2
+@EnableWebMvc
+@ComponentScan(basePackages = {"com.wholesmart.controller"})  //需要扫描的包路径
+public class SwaggerConfig extends WebMvcConfigurationSupport{
 
-    /**
-     * Required to autowire SpringSwaggerConfig
-     */
-    @Autowired
-    public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig)
-    {
-        this.springSwaggerConfig = springSwaggerConfig;
-    }
+	/**
+	 * 通过 createRestApi函数来构建一个DocketBean
+	 * 函数名,可以随意命名
+	 */
+	@Bean
+	public Docket createRestApi() {
+		ParameterBuilder parameterBuilder = new ParameterBuilder();
+		parameterBuilder
+		.parameterType("header") //参数类型支持header, cookie, body, query etc
+		.name("token") //参数名
+		.defaultValue("") //默认值
+		.description("header中token")
+		.modelRef(new ModelRef("string"))//指定参数值的类型
+		.required(false).build(); //非必需，这里是全局配置
+		List<Parameter> params = new ArrayList<Parameter>();
+		params.add(parameterBuilder.build());
 
-    /**
-     * Every SwaggerSpringMvcPlugin bean is picked up by the swagger-mvc
-     * framework - allowing for multiple swagger groups i.e. same code base
-     * multiple swagger resource listings.
-     */
-    @Bean
-    public SwaggerSpringMvcPlugin customImplementation()
-    {
-        return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
-                .apiInfo(apiInfo())
-                .includePatterns(".*?");
-    }
+		return new Docket(DocumentationType.SWAGGER_2)
+				.apiInfo(apiInfo())//调用apiInfo方法,创建一个ApiInfo实例,里面是展示在文档页面信息内容
+				.select()
+				//控制暴露出去的路径下的实例
+				//如果某个接口不想暴露,可以使用以下注解
+				//@ApiIgnore 这样,该接口就不会暴露在 swagger2 的页面下
+				.apis(RequestHandlerSelectors.basePackage("com.wholesmart.controller"))
+				.paths(PathSelectors.any())
+				.build().globalOperationParameters(params);
+	}
 
-    private ApiInfo apiInfo()
-    {
-        ApiInfo apiInfo = new ApiInfo(
-                "危险道路平台 API",
-                "此接口文档描述后台接口数据结构",
-                "terms of service",
-                "ningkm@whole-smart.com",
-                "My Apps API Licence Type",
-                "My Apps API License URL");
-        return apiInfo;
-    }
-    
+	private ApiInfo apiInfo() {
+		return new ApiInfoBuilder()
+				//页面标题
+				.title("心肺运动功能评估系统接口管理")
+				//创建人
+				.contact(new Contact("kangming.ning", "", "ningkangming@126.com"))
+				//版本号
+				.version("1.0")
+				//描述
+				.description("心肺运动功能评估系统接口")
+				.build();
+	}
+
+
 }
+
 

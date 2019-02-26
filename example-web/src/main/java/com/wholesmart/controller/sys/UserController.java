@@ -15,7 +15,8 @@ import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.wholesmart.common.web.JSONMessage;
 import com.wholesmart.entity.User;
 import com.wholesmart.service.IUserService;
-import com.wordnik.swagger.annotations.ApiOperation;
+
+import io.swagger.annotations.ApiOperation;
 
 /**
  * <p>

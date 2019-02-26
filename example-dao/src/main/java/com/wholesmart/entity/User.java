@@ -26,8 +26,8 @@ public class User extends Model<User> {
 	private String relname;
 	private String phone;
 	private String idcard;
-	private String roleId;
-	private String departmentId;
+	//private String roleId;
+	//private String departmentId;
 	private String sex;
 	private String email;
 	private String duty;
@@ -35,7 +35,7 @@ public class User extends Model<User> {
 	private String avatar;
 	private String credentialsSalt;
 	private String inputUser;
-	private Date inputTime;
+	//private Date inputTime;
 	private Date updateTime;
 	private String spare0;
 	private String spare1;
@@ -100,7 +100,7 @@ public class User extends Model<User> {
 		this.idcard = idcard;
 	}
 
-	public String getRoleId() {
+	/*public String getRoleId() {
 		return roleId;
 	}
 
@@ -114,7 +114,7 @@ public class User extends Model<User> {
 
 	public void setDepartmentId(String departmentId) {
 		this.departmentId = departmentId;
-	}
+	}*/
 
 	public String getSex() {
 		return sex;
@@ -172,13 +172,13 @@ public class User extends Model<User> {
 		this.inputUser = inputUser;
 	}
 
-	public Date getInputTime() {
+	/*public Date getInputTime() {
 		return inputTime;
 	}
 
 	public void setInputTime(Date inputTime) {
 		this.inputTime = inputTime;
-	}
+	}*/
 
 	public Date getUpdateTime() {
 		return updateTime;
@@ -243,8 +243,6 @@ public class User extends Model<User> {
 			", relname=" + relname +
 			", phone=" + phone +
 			", idcard=" + idcard +
-			", roleId=" + roleId +
-			", departmentId=" + departmentId +
 			", sex=" + sex +
 			", email=" + email +
 			", duty=" + duty +
@@ -252,7 +250,6 @@ public class User extends Model<User> {
 			", avatar=" + avatar +
 			", credentialsSalt=" + credentialsSalt +
 			", inputUser=" + inputUser +
-			", inputTime=" + inputTime +
 			", updateTime=" + updateTime +
 			", spare0=" + spare0 +
 			", spare1=" + spare1 +

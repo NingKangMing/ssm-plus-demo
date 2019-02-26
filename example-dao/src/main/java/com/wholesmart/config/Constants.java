@@ -1,4 +1,4 @@
-package com.wholesmart.commom.config;
+package com.wholesmart.config;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
