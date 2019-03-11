@@ -12,6 +12,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jstl.version>1.2</jstl.version>
+		<thymeleaf-shiro.version>2.0.0</thymeleaf-shiro.version>
+		<thymeleaf-spring4.version>3.0.6.RELEASE</thymeleaf-spring4.version>
+		<ehcache.version>2.6.11</ehcache.version>
 	</properties>
 	<dependencies>
 		<!-- 依赖道路系统service 依赖具有传递性，dao依赖了通用工具包 因此不需要再引入通用工具包 -->
@@ -25,19 +28,37 @@
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>6.0.53</version>
-			<scope>compile</scope>
-		</dependency>
 		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>6.0.53</version>
-			 <scope>compile</scope> 
-		</dependency> -->
-	
+			<groupId>org.jasig.cas.client</groupId>
+			<artifactId>cas-client-core</artifactId>
+			<version>3.5.1</version>
+		</dependency>
+		<!-- <dependency> <groupId>org.apache.tomcat</groupId> <artifactId>servlet-api</artifactId> 
+			<version>6.0.53</version> <scope>compile</scope> </dependency> <dependency> 
+			<groupId>org.apache.tomcat</groupId> <artifactId>jsp-api</artifactId> <version>6.0.53</version> 
+			<scope>compile</scope> </dependency> -->
+
+		<!-- ehcache 缓存 -->
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+			<version>${ehcache.version}</version>
+		</dependency>
+
+		<!-- thmleaf模板 结合shiro前端的验证代码更加简洁 (本项目中用于替代jsp页面引擎的页面引擎) -->
+		<dependency>
+			<groupId>org.thymeleaf</groupId>
+			<artifactId>thymeleaf-spring4</artifactId>
+			<version>${thymeleaf-spring4.version}</version>
+		</dependency>
+		<!-- thymeleaf模板shiro标签 -->
+		<dependency>
+			<groupId>com.github.theborakompanioni</groupId>
+			<artifactId>thymeleaf-extras-shiro</artifactId>
+			<version>${thymeleaf-shiro.version}</version>
+		</dependency>
+		<!--END thmleaf模板 -->
+
 	</dependencies>
 	<!-- 编译相关配置 -->
 	<build>

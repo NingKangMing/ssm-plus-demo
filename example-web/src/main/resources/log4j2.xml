@@ -10,11 +10,11 @@
 		<logger name="druid.sql" level="INFO" />
 		<logger name="org.apache.shiro" level="INFO" />
 		<logger name="org.mybatis.spring" level="INFO" />
-		<logger name="org.springframework" level="DEBUG" />
+		<logger name="org.springframework" level="INFO" />
 		<logger name="com.baomidou.mybatisplus" level="INFO" />
 		<logger name="org.apache.ibatis.io" level="INFO" />
 
-		<Root level="DEBUG">
+		<Root level="INFO">
 			<AppenderRef ref="Console" />
 		</Root>
 	</Loggers>

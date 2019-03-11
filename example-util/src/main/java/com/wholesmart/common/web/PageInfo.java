@@ -20,10 +20,10 @@ public class PageInfo implements Serializable{
 	private int offset;
 	
 	/** 每页显示的记录数 */
-	private int limit;
+	private int limit=15;
 	
 	/** 当前页 */
-	private int current;
+	private int current=1;
 	
 	/** 排序字段 */
 	private String sort;

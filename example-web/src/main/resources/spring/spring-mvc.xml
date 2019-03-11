@@ -1,80 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
-http://www.springframework.org/schema/beans/spring-beans-4.2.xsd 
+http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
 http://www.springframework.org/schema/context 
-http://www.springframework.org/schema/context/spring-context-4.2.xsd 
-http://www.springframework.org/schema/mvc 
+http://www.springframework.org/schema/context/spring-context-4.2.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-4.2.xsd 
+http://www.springframework.org/schema/mvc
 http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
 
 	<context:property-placeholder location="classpath:config.properties" />
 	<!-- 自动扫描 -->
 	<context:component-scan base-package="com.wholesmart.controller" />
+	
+	<!-- 启动对@AspectJ注解的支持 -->
+	<!-- <aop:aspectj-autoproxy/> -->
+	 <aop:aspectj-autoproxy proxy-target-class="true"/>
 
-	<!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
-	<bean id="fastJsonHttpMessageConverter"
-		class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
-		<property name="supportedMediaTypes">
-			<list>
-				<value>text/html;charset=UTF-8</value>
-				<value>application/json;charset=UTF-8</value>
-			</list>
-		</property>
-		<property name="features">
-			<array value-type="com.alibaba.fastjson.serializer.SerializerFeature">
-				<!-- 避免循环引用 -->
-				<value>DisableCircularReferenceDetect</value>
-				<!-- 是否输出值为null的字段 -->
-				<value>WriteMapNullValue</value>
-				<!-- 数值字段如果为null,输出为0,而非null -->
-				<value>WriteNullNumberAsZero</value>
-				<!-- 字符类型字段如果为null,输出为"",而非null -->
-				<value>WriteNullStringAsEmpty</value>
-				<!-- List字段如果为null,输出为[],而非null -->
-				<value>WriteNullListAsEmpty</value>
-				<!-- Boolean字段如果为null,输出为false,而非null -->
-				<value>WriteNullBooleanAsFalse</value>
-			</array>
-		</property>
-	</bean>
+
+	<!-- 解决json乱码和LongID转换字符串问题 避免IE执行AJAX时,返回JSON出现下载文件 -->
 	<mvc:annotation-driven>
 		<mvc:message-converters register-defaults="true">
-			<ref bean="fastJsonHttpMessageConverter" />
+			<bean id="fastJsonHttpMessageConverter"
+				class="com.wholesmart.common.support.spring.converter.MappingFastjsonHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+				<property name="features">
+					<array value-type="com.alibaba.fastjson.serializer.SerializerFeature">
+						<!-- 避免循环引用 -->
+						<value>DisableCircularReferenceDetect</value>
+						<!-- 是否输出值为null的字段 -->
+						<value>WriteMapNullValue</value>
+						<!-- 数值字段如果为null,输出为0,而非null -->
+						<value>WriteNullNumberAsZero</value>
+						<!-- 字符类型字段如果为null,输出为"",而非null -->
+						<value>WriteNullStringAsEmpty</value>
+						<!-- List字段如果为null,输出为[],而非null -->
+						<value>WriteNullListAsEmpty</value>
+						<!-- Boolean字段如果为null,输出为false,而非null -->
+						<value>WriteNullBooleanAsFalse</value>
+					</array>
+				</property>
+			</bean>
+			<bean class="com.wholesmart.common.support.spring.converter.UTF8StringHttpMessageConverter" />
 		</mvc:message-converters>
 	</mvc:annotation-driven>
-
-	<!-- 静态资源配置 -->
-	<mvc:resources mapping="/api/**" location="/api/" />
-	<mvc:resources mapping="/static/**" location="/static/" />
 
 	<!-- 拦截器配置，拦截顺序：先执行后定义的，排在第一位的最后执行。为每个请求打印JVM内存使用情况 -->
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
-			<mvc:exclude-mapping path="/**/*toLogin*" />
+			<mvc:exclude-mapping path="/**/*doLogin*" />
 			<mvc:exclude-mapping path="/**/*login*" />
 			<mvc:exclude-mapping path="/static/**" />
 			<mvc:exclude-mapping path="/api/**" />
-			<bean class="com.wholesmart.interceptor.JvmLogInterceptor">
+			<mvc:exclude-mapping path="/webjars/**" />
+			<mvc:exclude-mapping path="/swagger-resources/**" />
+			<bean class="com.wholesmart.common.web.interceptor.JvmLogInterceptor">
 				<property name="debug" value="${sys.printJvm}"></property><!-- 是否为每个请求打印JVM信息 -->
 			</bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
 
-	<!-- 对模型视图名称的解析，在模型视图名称添加前后缀 -->
-	<bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-		p:prefix="/WEB-INF/views/" p:suffix=".jsp" />
+	<!-- <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"> 
+		<property name="basename" value="Messages" /> </bean> -->
 
-	<!-- 解决json乱码 -->
-	<mvc:annotation-driven>
-		<mvc:message-converters register-defaults="true">
-			<bean
-				class="com.wholesmart.common.util.spring.UTF8StringHttpMessageConverter" />
-		</mvc:message-converters>
-	</mvc:annotation-driven>
+	<!-- 对模型视图名称的解析，在模型视图名称添加前后缀 -->
+	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
+		p:prefix="/WEB-INF/views/" p:suffix=".jsp" /> -->
+
+	<!-- 用thymeleaf作页面引擎 Thymeleaf标准方言 官方文档:http://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html -->
+	<!-- SpringResourceTemplateResolver automatically integrates with Spring's 
+		own -->
+	<!-- resource resolution infrastructure, which is highly recommended. -->
+	<!-- 这个模板解析器允许应用使用标准Spring资源解析语法来解析模板程序 -->
+	<bean id="templateResolver"
+		class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".html" />
+		<!-- HTML is the default value, added here for the sake of clarity. -->
+		<property name="templateMode" value="HTML" />
+		<!-- Template cache is true by default. Set to false if you want -->
+		<!-- templates to be automatically updated when modified. -->
+		<property name="cacheable" value="false" />
+		<property name="characterEncoding" value="UTF-8"></property>
+	</bean>
+
+	<!-- SpringTemplateEngine automatically applies SpringStandardDialect and -->
+	<!-- enables Spring's own MessageSource message resolution mechanisms. -->
+	<bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+		<property name="templateResolver" ref="templateResolver" />
+		<property name="additionalDialects">
+			<set>
+				<bean class="at.pollux.thymeleaf.shiro.dialect.ShiroDialect" />
+			</set>
+		</property>
+		<!-- Enabling the SpringEL compiler with Spring 4.2.4 or newer can speed 
+			up -->
+		<!-- execution in most scenarios, but might be incompatible with specific -->
+		<!-- cases when expressions in one template are reused across different 
+			data -->
+		<!-- ypes, so this flag is "false" by default for safer backwards -->
+		<!-- compatibility. -->
+		<property name="enableSpringELCompiler" value="true" />
+	</bean>
+
+	<!-- 视图解析器 -->
+	<bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+		<property name="templateEngine" ref="templateEngine" />
+		<property name="characterEncoding" value="UTF-8" />
+		<!-- NOTE 'order' and 'viewNames' are optional -->
+		<!-- <property name="order" value="1" /> <property name="viewNames" value="*.html,*.xhtml" 
+			/> -->
+	</bean>
+
+	<mvc:default-servlet-handler />
+
 	<!-- 静态资源配置 -->
 	<mvc:resources mapping="/api/**" location="/api/"
 		cache-period="31556926" /><!-- swagger 自定义模板 -->
@@ -83,8 +132,8 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
 		mapping="swagger-ui.html" />
 	<mvc:resources location="classpath:/META-INF/resources/webjars/"
 		mapping="/webjars/**" />
-
-	<bean id="multipartResolver"
+		
+   	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="defaultEncoding">
 			<value>UTF-8</value>
@@ -96,4 +145,5 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
 			<value>4096</value>
 		</property>
 	</bean>
+
 </beans>

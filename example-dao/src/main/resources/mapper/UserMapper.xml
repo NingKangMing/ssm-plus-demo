@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wholesmart.mapper.UserMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wholesmart.entity.User">
+		<id column="id" property="id" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="age" property="age" />
+		<result column="relname" property="relname" />
+		<result column="phone" property="phone" />
+		<result column="idcard" property="idcard" />
+		<result column="department_id" property="departmentId" />
+		<result column="sex" property="sex" />
+		<result column="email" property="email" />
+		<result column="duty" property="duty" />
+		<result column="reg_ip" property="regIp" />
+		<result column="avatar" property="avatar" />
+		<result column="credentials_salt" property="credentialsSalt" />
+		<result column="input_user" property="inputUser" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+		<result column="status" property="status" />
+		<result column="u_locked" property="uLocked" />
+		<result column="spare0" property="spare0" />
+		<result column="spare1" property="spare1" />
+		<result column="spare2" property="spare2" />
+		<result column="spare3" property="spare3" />
+		<result column="spare4" property="spare4" />
+	</resultMap>
+
+
+	<resultMap id="userRoleMap" type="com.wholesmart.entity.User"
+		extends="BaseResultMap">
+		<association property="role" column="id"
+			javaType="com.wholesmart.entity.Role">
+			<id column="r_id" property="id" />
+			<result column="role_name" property="roleName" />
+			<result column="role_key" property="roleKey" />
+		</association>
+	</resultMap>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id, username, password, age, relname, phone, idcard,
+		department_id AS
+		departmentId, sex, email, duty, reg_ip AS regIp,
+		avatar,
+		credentials_salt AS credentialsSalt, input_user AS inputUser,
+		create_time AS createTime, update_time AS updateTime, status, u_locked
+		AS uLocked, spare0, spare1, spare2, spare3, spare4
+	</sql>
+
+	<select id="selectUserRole" resultMap="userRoleMap"
+		parameterType="map">
+		SELECT u.id,
+		u.username,
+		u.`password`,
+		u.`status`,
+		u.credentials_salt,
+		u.create_time,
+		u.update_time,
+		r.id as r_id,
+		r.role_name,
+		r.role_key,
+		r.`status` as roleStatus,
+		r.description
+		FROM t_user u LEFT JOIN
+		t_user_role ru ON u.id = ru.user_id LEFT JOIN t_role r ON ru.role_id =
+		r.id
+		<where>
+			<if test="userId != null and userId != ''">
+				u.id=#{userId}
+			</if>
+			<if test="username != null and username != ''">
+				u.username=#{username}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectUserPage" resultType="com.wholesmart.entity.User">
+		SELECT u.*,de.`name` as department FROM t_user u LEFT JOIN
+		t_department de ON u.department_id=de.id
+		<where>
+			${ew.sqlSegment}
+		</where>
+	</select>
+
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	maxBytesLocalDisk="20G"
+	>
+
+    <diskStore path="java.io.tmpdir"/>
+
+    <!-- 登录记录缓存 锁定10分钟 -->
+    <cache name="passwordRetryCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <cache name="authorizationCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <cache name="authenticationCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <cache name="shiro-activeSessionCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+    
+    <!-- mqtt缓存 -->
+     <cache name="mqttclientCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+    
+    
+     <!--
+	    maxElementsInMemory="10000" 	//Cache中最多允许保存的数据对象的数量
+		
+		external="false" 				//缓存中对象是否为永久的，如果是，超时设置将被忽略，对象从不过期 
+		
+		timeToLiveSeconds="3600"  		//缓存的存活时间，从开始创建的时间算起 单位秒
+		timeToIdleSeconds="3600"  		//多长时间不访问该缓存，那么ehcache 就会清除该缓存  
+		overflowToDisk="true"    		//内存不足时，是否启用磁盘缓存  
+		
+		diskSpoolBufferSizeMB	//设置DiskStore（磁盘缓存）的缓存区大小。默认是30MB。每个Cache都应该有自己的一个缓冲区
+		maxElementsOnDisk		//硬盘最大缓存个数
+		diskPersistent			//是否缓存虚拟机重启期数据The default value is false
+		
+		diskExpiryThreadIntervalSeconds	//磁盘失效线程运行时间间隔，默认是120秒。
+		
+		memoryStoreEvictionPolicy="LRU" //当达到maxElementsInMemory限制时，Ehcache将会根据指定的策略去清理内存。默认策略是LRU（最近最少使用）。你可以设置为FIFO（先进先出）或是LFU（较少使用）。
+        clearOnFlush	//内存数量最大时是否清除
+        
+        maxEntriesLocalHeap="0"
+        maxEntriesLocalDisk="1000"
+    -->
+
+</ehcache>

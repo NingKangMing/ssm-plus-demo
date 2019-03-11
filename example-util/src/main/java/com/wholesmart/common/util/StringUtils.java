@@ -14,8 +14,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.LocaleResolver;
 
+import com.wholesmart.common.support.spring.SpringContextHolder;
 import com.wholesmart.common.util.security.Encodes;
-import com.wholesmart.common.util.spring.SpringContextHolder;
 
 
 /**
@@ -366,5 +366,41 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     	return result.toString();
     }
     
+	/**
+	 * 判断字符串是否为空字符串或者null。
+	 * 
+	 * @param value
+	 * @return
+	 * @roseuid 417C9212008D
+	 */
+	public static boolean isNullOrBlank(String value) {
+		return isNull(value) || isBlank(value);
+	}
+	
+	/**
+	 * 判断字符串是否为空字符。
+	 * 
+	 * @param value
+	 * @return
+	 * @roseuid 417C9212006E
+	 */
+	public static boolean isBlank(String value) {
+		boolean ret = false;
+		if (value != null && value.equals("")) {
+			ret = true;
+		}
+		return ret;
+	}
+	
+	/**
+	 * 判断字符串是否为null。
+	 * 
+	 * @param value
+	 * @return
+	 * @roseuid 417C9212007E
+	 */
+	public static boolean isNull(String value) {
+		return value == null ? true : false;
+	}
 }
 

@@ -11,24 +11,26 @@
         <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>
     </bean>
 
-    <!-- 凭证匹配器 -->
-    <bean id="credentialsMatcher" class="com.xutown.hurtplatform.common.shiro.credentials.RetryLimitHashedCredentialsMatcher">
-        <constructor-arg ref="cacheManager"/>
-        <property name="hashAlgorithmName" value="md5"/>
-        <property name="hashIterations" value="2"/>
-        <property name="storedCredentialsHexEncoded" value="true"/>
-    </bean>
+   <!-- 凭证匹配器 -->
+	<bean id="credentialsMatcher"
+		class="com.wholesmart.common.shiro.RetryLimitHashedCredentialsMatcher">
+		<constructor-arg ref="cacheManager" />
+		<property name="hashAlgorithmName" value="md5" />
+		<property name="hashIterations" value="2" /><!-- 散列次数 默认为2 此处必须跟加密时的散列次数保持一致 -->
+		<property name="storedCredentialsHexEncoded" value="true" /><!--是否利用16进制进行编码 -->
+	</bean>
 
-    <!-- Realm实现 -->
-    <bean id="userRealm" class="com.xutown.hurtplatform.common.shiro.realm.SysUserRealm">
-        <property name="sysUserService" ref="sysUserService"/>
-        <property name="credentialsMatcher" ref="credentialsMatcher"/>
-         <property name="cachingEnabled" value="true"/>
-         <property name="authenticationCachingEnabled" value="true"/>
-         <property name="authenticationCacheName" value="authenticationCache"/>
-         <property name="authorizationCachingEnabled" value="true"/>
-         <property name="authorizationCacheName" value="authorizationCache"/>
-    </bean>
+   <!-- Realm实现 -->
+	<bean id="userRealm" class="com.wholesmart.webcommon.shiro.SysShiroRealm">
+		<property name="userService" ref="userServiceImpl" />
+		<property name="resourceService" ref="resourceServiceImpl" />
+		<property name="credentialsMatcher" ref="credentialsMatcher" />
+		<property name="cachingEnabled" value="true" />
+		<property name="authenticationCachingEnabled" value="false" />
+		<property name="authenticationCacheName" value="authenticationCache" />
+		<property name="authorizationCachingEnabled" value="true" />
+		<property name="authorizationCacheName" value="authorizationCache" />
+	</bean>
 
     <!-- 会话ID生成器 -->
     <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
@@ -40,12 +42,12 @@
         <property name="maxAge" value="180000"/>
     </bean>
 
-    <!-- 会话DAO -->
-    <bean id="sessionDAO" class="com.xutown.hurtplatform.common.shiro.sessiondao.SysSessionDao">
-        <property name="activeSessionsCacheName" value="shiro-activeSessionCache"/>
-        <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
-        <property name="cacheManager" ref="cacheManager"/>
-    </bean>
+   <!-- 会话DAO -->
+	<bean id="sessionDAO" class="com.wholesmart.webcommon.shiro.ShiroSessionDao">
+		<property name="activeSessionsCacheName" value="shiro-activeSessionCache" />
+		<property name="sessionIdGenerator" ref="sessionIdGenerator" />
+		<property name="cacheManager" ref="cacheManager" />
+	</bean>
 
     <!-- 会话验证调度器 -->
     <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler">
@@ -53,16 +55,17 @@
         <property name="sessionManager" ref="sessionManager"/>
     </bean>
 
-    <!-- 会话管理器 -->
-    <bean id="sessionManager" class="com.xutown.hurtplatform.common.shiro.sessionmanager.DefaultWebSessionManager">
-        <property name="globalSessionTimeout" value="1800000"/>
-        <property name="deleteInvalidSessions" value="true"/>
-        <property name="sessionValidationSchedulerEnabled" value="true"/>
-        <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
-        <property name="sessionDAO" ref="sessionDAO"/>
-        <property name="sessionIdCookieEnabled" value="true"/>
-        <property name="sessionIdCookie" ref="sessionIdCookie"/>
-    </bean>
+   <!-- 会话管理器 -->
+	<bean id="sessionManager"
+		class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<property name="globalSessionTimeout" value="1800000" />
+		<property name="deleteInvalidSessions" value="true" />
+		<property name="sessionValidationSchedulerEnabled" value="true" />
+		<property name="sessionValidationScheduler" ref="sessionValidationScheduler" />
+		<property name="sessionDAO" ref="sessionDAO" />
+		<property name="sessionIdCookieEnabled" value="true" />
+		<property name="sessionIdCookie" ref="sessionIdCookie" />
+	</bean>
 
     <!-- 安全管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
@@ -76,66 +79,44 @@
         <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
         <property name="arguments" ref="securityManager"/>
     </bean>
+    
+    <!-- 用户验证过滤器 -->
+	<bean id="userAuthFilter"
+		class="com.wholesmart.common.shiro.filter.UserAuthenticationFilter" />
+    
 
-	<bean id="mobileCheckSessionFilter" class="com.xutown.hurtplatform.common.shiro.filter.MobileCheckSessionFilter"/>
-	
-	<bean id="registerShiroFilter" class="com.xutown.hurtplatform.common.shiro.filter.RegisterShiroFilter"/>
+  <!-- 过滤链工厂 过滤链将会把Servlet container的原始ServletRequest进行封装({AbstractShiroFilter#wrapServletRequest}) 
+		传递到spring mvc的ServletRequest实际是ShiroHttpServletRequest -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean"><!-- bean id需要跟web.xml的匹配 -->
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/login" /> <!-- 路径会在过滤链中传递 -->
+		<property name="successUrl" value="/index.html" />
+		<property name="unauthorizedUrl" value="/login" />
+		<property name="filters">
+			<map>
+				<entry key="userAuth" value-ref="userAuthFilter"></entry>
+			</map>
+		</property>
+		<property name="filterChainDefinitions">
+			<value>
+				/login= anon  <!-- 后缀为/login的链接不验证 -->
+				/login.do= anon
+				/dologin=anon
+				/dologin.do=anon
+				<!-- 静态资源不拦截 -->
+				/static/**=anon
+				/api/**=anon
+				/webjars/**=anon
+				<!-- /**= userAuth  -->  <!-- 除了登陆路径 其它路径都要经过认证链 -->
+			</value>
+		</property>
+	</bean>
 
-    <!-- 基于Form表单的身份验证过滤器 -->
-    <bean id="formAuthenticationFilter" class="com.xutown.hurtplatform.common.shiro.filter.FormAuthenticationFilter">
-        <property name="usernameParam" value="userName"/>
-        <property name="passwordParam" value="password"/>
-        <property name="loginUrl" value="/account/login"/>
-        <property name="toLoginUrl" value="/account/toLogin"/>
-        <property name="successUrl" value="/account/index"/>
-    </bean>
-
-    <!-- Shiro的Web过滤器 -->
-    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
-        <property name="securityManager" ref="securityManager"/>
-        <property name="loginUrl" value="/account/toLogin"/>
-        <property name="filters">
-            <util:map>
-                <entry key="authc" value-ref="formAuthenticationFilter"/>
-                <entry key="mobile" value-ref="mobileCheckSessionFilter"/>
-                <entry key="register" value-ref="registerShiroFilter"/>
-            </util:map>
-        </property>
-        <property name="filterChainDefinitions">
-            <value>
-            
-            <!-- 静态资源不拦截 -->
-                /api/** = anon
-                /api-docs/** = anon
-				/css/**=anon
-				/js/**=anon
-				/images/**=anon
-				/upload/**=anon
-				
-            <!-- 	/index = authc
-                /account/toLogin = anon
-                /account/toRegister = anon
-                /account/login = mobile,authc
-                /account/register = register
-                /account/logout = mobile,authc
-               	/*/mobile/** = mobile,authc
-              	/** = authc -->
-              	
-<!--            		/index = authc
-                /api/** = anon
-                /api-docs/** = anon
-                /account/toLogin = anon
-                /account/toRegister = anon
-                /account/login = mobile,authc
-                /account/register = register
-                /account/logout = mobile,authc
-               	/*/mobile/** = anon 
-              	/** = anon -->
-            </value>
-        </property>
-    </bean>
-
-    <!-- Shiro生命周期处理器-->
-    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+   <!-- 保证shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
 
 </beans>

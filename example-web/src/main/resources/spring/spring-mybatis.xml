@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-4.2.xsd 
 http://www.springframework.org/schema/tx 
@@ -9,9 +12,11 @@ http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
 ">
 
 	<!-- JNDI方式配置数据源 -->
-	<!-- <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> <property name="jndiName" value="${jndiName}"></property> </bean> -->
+	<!-- <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> 
+		<property name="jndiName" value="${jndiName}"></property> </bean> -->
 	<!-- 配置数据源 -->
-	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
 		<property name="url" value="${jdbc_url}" />
 		<property name="username" value="${jdbc_username}" />
 		<property name="password" value="${jdbc_password}" />
@@ -21,12 +26,13 @@ http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
 		<property name="maxActive" value="50" />
 		<!-- 连接池最大空闲 -->
 		<!--property name="maxIdle" value="150" -->
-		<!-- 连接池最小空闲 --> 
+		<!-- 连接池最小空闲 -->
 		<property name="minIdle" value="0" />
 		<!-- 获取连接最大等待时间 -->
 		<property name="maxWait" value="60000" />
 
-		<!-- <property name="poolPreparedStatements" value="true" /> <property name="maxPoolPreparedStatementPerConnectionSize" value="33" /> -->
+		<!-- <property name="poolPreparedStatements" value="true" /> <property 
+			name="maxPoolPreparedStatementPerConnectionSize" value="33" /> -->
 
 		<property name="validationQuery" value="${validationQuery}" />
 		<property name="testOnBorrow" value="false" />
@@ -50,23 +56,33 @@ http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
 		<property name="filters" value="mergeStat" />
 	</bean>
 	<!-- Spring整合Mybatis，更多查看文档：http://mp.baomidou.com -->
-	<bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
-		 <property name="dataSource" ref="dataSource" />
-		 <property name="typeAliasesPackage" value="com.wholesmart.model"/>
-       <!--  <property name="typeAliasesSuperType" value="com.wholesmart.common.persistence.BaseEntity"/> -->
+	<bean id="sqlSessionFactory"
+		class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="com.wholesmart.model" />
+		<!-- <property name="typeAliasesSuperType" value="com.wholesmart.common.persistence.BaseEntity"/> -->
 		<!-- 自动扫描entity目录, 省掉mybatis-config.xml里的手工配置 -->
-		<property name="mapperLocations" value="classpath:mapping/**/*.xml"></property>
+		<property name="mapperLocations" value="classpath*:mapping/**/*.xml"></property>
 		<!-- mybatis全局配置文件 -->
-		 <property name="configLocation" value="classpath:mybatis-config.xml" />
-		 <property name="plugins">
-            <array>
-                <!-- 分页插件配置 -->
-                <bean id="paginationInterceptor" class="com.baomidou.mybatisplus.plugins.PaginationInterceptor">
-                </bean>
-            </array>
-        </property>
-        <!-- 全局配置注入 -->
-	    <property name="globalConfig" ref="globalConfig" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<property name="plugins">
+			<array>
+				<!-- 分页插件配置 -->
+				<bean id="paginationInterceptor"
+					class="com.baomidou.mybatisplus.plugins.PaginationInterceptor">
+					<property name="localPage" value="true" />
+				</bean>
+				<!-- SQL 执行性能分析，开发环境使用，线上不推荐。 最大执行时长 maxTime SQL 执行最大时长，超过自动停止运行，有助于发现问题 
+					毫秒 
+				<bean id="performanceIntercetor"
+					class="com.baomidou.mybatisplus.plugins.PerformanceInterceptor">
+					<property name="maxTime" value="15000" />
+					<property name="format" value="true" />
+				</bean>   -->
+			</array>
+		</property>
+		<!-- 全局配置注入 -->
+		<property name="globalConfig" ref="globalConfig" />
 	</bean>
 	<bean id="globalConfig" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
 		<!-- AUTO->`0`("数据库ID自增") INPUT->`1`(用户输入ID") ID_WORKER->`2`("全局唯一ID") 
@@ -77,59 +93,70 @@ http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
 		<!-- Oracle需要添加该项 -->
 		<!-- <property name="dbType" value="oracle" /> -->
 		<!-- 全局表为下划线命名设置 true -->
-		 <property name="dbColumnUnderline" value="true" />
+		<property name="dbColumnUnderline" value="true" />
+		<!-- 公共字段填充处理器 -->
+		<property name="metaObjectHandler" ref="myMetaObjectHandler" />
 	</bean>
+	 <!-- 自定义公共字段处理器 -->
+     <bean id="myMetaObjectHandler" class="com.wholesmart.common.mybatisplus.MyMetaObjectHandler" />
 
-    <!-- MyBatis 动态扫描  -->
+	<!-- MyBatis 动态扫描 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.wholesmart.mapper" />
 	</bean>
 
 	<!-- 配置事务管理器 -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
 	<!-- 注解方式配置事物 -->
 	<!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
 
-    <!-- 事务管理 属性 -->
-    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
-        <tx:attributes>
-            <tx:method name="add*" propagation="REQUIRED"/>
-            <tx:method name="append*" propagation="REQUIRED"/>
-            <tx:method name="save*" propagation="REQUIRED"/>
-            <tx:method name="update*" propagation="REQUIRED"/>
-            <tx:method name="modify*" propagation="REQUIRED"/>
-            <tx:method name="edit*" propagation="REQUIRED"/>
-            <tx:method name="insert*" propagation="REQUIRED"/>
-            <tx:method name="delete*" propagation="REQUIRED"/>
-            <tx:method name="remove*" propagation="REQUIRED"/>
-            <tx:method name="repair" propagation="REQUIRED"/>
+	<!-- 事务管理 属性 -->
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="append*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="modify*" propagation="REQUIRED" />
+			<tx:method name="edit*" propagation="REQUIRED" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="remove*" propagation="REQUIRED" />
+			<tx:method name="repair" propagation="REQUIRED" />
 
-            <tx:method name="get*" propagation="REQUIRED" read-only="true"/>
-            <tx:method name="find*" propagation="REQUIRED" read-only="true"/>
-            <tx:method name="load*" propagation="REQUIRED" read-only="true"/>
-            <tx:method name="search*" propagation="REQUIRED" read-only="true"/>
-            <tx:method name="datagrid*" propagation="REQUIRED" read-only="true"/>
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="load*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="search*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="datagrid*" propagation="REQUIRED"
+				read-only="true" />
 
-            <tx:method name="*" propagation="REQUIRED" read-only="true"/>
-        </tx:attributes>
-    </tx:advice>
+			<tx:method name="*" propagation="REQUIRED" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
 	<aop:config>
-		<aop:pointcut id="transactionPointcut" expression="execution(* com.wholesmart.service..*Impl.*(..))" />
-		<aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice" />
+		<aop:pointcut id="transactionPointcut"
+			expression="execution(* com.wholesmart.service..*Impl.*(..))" />
+		<aop:advisor pointcut-ref="transactionPointcut"
+			advice-ref="transactionAdvice" />
 	</aop:config>
 
 
 	<!-- 配置druid监控spring jdbc -->
-	<bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
+	<bean id="druid-stat-interceptor"
+		class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
 	</bean>
-	
+
 	<!-- 配置切面 -->
-    <aop:config>
-        <aop:pointcut id="transactionPointcut" expression="execution(* com.wholesmart.service..*.*(..))"/>
-        <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
-    </aop:config>
+	<aop:config>
+		<aop:pointcut id="transactionPointcut"
+			expression="execution(* com.wholesmart.service..*.*(..))" />
+		<aop:advisor pointcut-ref="transactionPointcut"
+			advice-ref="transactionAdvice" />
+	</aop:config>
 
 </beans>

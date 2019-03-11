@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wholesmart.mapper.ResourceMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wholesmart.entity.Resource">
+		<id column="id" property="id" />
+		<result column="parent_id" property="parentId" />
+		<result column="source_code" property="sourceCode" />
+		<result column="source_name" property="sourceName" />
+		<result column="source_key" property="sourceKey" />
+		<result column="type" property="type" />
+		<result column="url" property="url" />
+		<result column="icon" property="icon" />
+		<result column="hidden" property="hidden" />
+		<result column="description" property="description" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+		<result column="level" property="level" />
+	</resultMap>
+
+	<resultMap id="resourceMap" type="com.wholesmart.entity.Resource"
+		extends="BaseResultMap">
+		<result column="s_parentName" property="parentName" />
+		<result column="checked" property="checked" />
+	</resultMap>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id, parent_id AS parentId, source_code AS sourceCode,
+		source_name AS
+		sourceName, source_key AS sourceKey, type, url, icon,
+		hidden,
+		description, create_time AS createTime, update_time AS
+		updateTime,
+		level
+	</sql>
+
+
+	<select id="findResourcesByUserId" parameterType="int"
+		resultMap="BaseResultMap" flushCache="true" useCache="true">
+		SELECT s.id,
+		s.parent_id, s.source_code,
+		s.source_name ,
+		s.source_key, s.type, s.url,
+		s.icon, s.hidden,
+		s.description,
+		s.create_time,
+		s.update_time,
+		s.level
+		FROM t_resource s, t_role_resources sr, t_role r, t_user_role
+		ru
+		WHERE
+		s.id
+		= sr.resource_id AND sr.role_id = r.id AND r.id =
+		ru.role_id AND
+		ru.user_id=${userId}
+	</select>
+
+	<select id="findResourcesMenuByUserId" parameterType="int"
+		resultMap="BaseResultMap" flushCache="true" useCache="true">
+		SELECT s.id,
+		s.parent_id, s.source_code,
+		s.source_name ,
+		s.source_key, s.type, s.url,
+		s.icon, s.hidden,
+		s.description,
+		s.create_time,
+		s.update_time,
+		s.level
+		FROM t_resource s, t_role_resources sr, t_role r, t_user_role
+		ru
+		WHERE
+		s.id
+		= sr.resource_id AND sr.role_id = r.id AND r.id =
+		ru.role_id 
+		AND s.type !=2
+		AND ru.user_id=${userId}
+	</select>
+
+	<select id="queryResourceList" parameterType="map" resultMap="BaseResultMap"
+		flushCache="true" useCache="true">
+		SELECT t1.id,
+		t1.parent_id,
+		t1.source_name,
+		t2.source_name AS
+		s_parentName,
+		t1.source_key,
+		t1.type,
+		t1.url,
+		t1.hidden,
+		t1.description,
+		t1.create_time,
+		t1.update_time,
+		CASE WHEN t3.resource_id IS NULL THEN
+		FALSE ELSE TRUE END AS checked
+		FROM t_resource t1 LEFT JOIN t_resource
+		t2 ON t1.parent_id = t2.id
+		LEFT JOIN t_role_resources t3 on t1.id =
+		t3.resource_id and
+		t3.role_id=${roleId}
+		<where>
+			<if test="hidden != null">
+				and t1.hidden=${hidden}
+			</if>
+			<if test="type != null">
+				and t1.type=${type}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectResourcePage" resultMap="BaseResultMap">
+		SELECT t1.id,
+		t1.parent_id,
+		t1.source_name,
+		t1.source_key,
+		t1.type,
+		t1.url,
+		t1.icon,
+		t1.hidden,
+		t1.description,
+		t1.create_time,
+		t1.update_time,
+		CASE WHEN
+		(SELECT count(t2.id) FROM t_resource t2 where t2.parent_id = t1.id)>0
+		THEN
+		FALSE
+		ELSE
+		TRUE
+		END AS last
+		FROM t_resource t1 ${ew.sqlSegment}
+
+	</select>
+
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wholesmart.mapper.SystemConfigMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wholesmart.entity.SystemConfig">
+		<id column="id" property="id" />
+		<result column="key1" property="key1" />
+		<result column="value1" property="value1" />
+		<result column="is_sys" property="isSys" />
+		<result column="memo" property="memo" />
+		<result column="input_user" property="inputUser" />
+		<result column="input_time" property="inputTime" />
+		<result column="user_id" property="userId" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, key1, value1,is_sys,memo, input_user AS inputUser, input_time AS inputTime, user_id AS userId
+    </sql>
+
+</mapper>

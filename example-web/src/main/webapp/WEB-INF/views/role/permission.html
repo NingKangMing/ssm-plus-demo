@@ -1,0 +1,88 @@
+
+<link rel="stylesheet" th:href="@{/plugins/ztree3/css/metroStyle/metroStyle.css}"/>
+<div class="row-content am-cf">
+	<div class="row">
+		<div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+			<div class="widget am-cf">
+				<div class="widget-body am-fr">
+				   <!-- 资源树 -->
+				   <div class="am-form-group">
+				       <ul id="selectTree" class="ztree" ></ul>
+				   </div>
+				   <div class="am-form-group">
+						<div class="am-u-sm-10 layui-layer-btn">
+							<a class="layui-layer-btn0" onclick="savePermission()">提交</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script th:src="@{/ui/js/jquery.min.js}"></script>
+<script th:src="@{/plugins/layer-v2.3/layer.js}"></script>	
+<script th:src="@{/ui/js/app.js}"></script>
+<script th:src="@{/plugins/ztree/jquery.ztree.all.min.js}"/>
+<script th:inline="javascript">
+	var setting = {
+			view: {
+				dblClickExpand: false
+			},
+			data: {
+				simpleData: {
+					enable: true,
+					pIdKey: "parentId",
+				}
+			},
+			check: {
+				enable: true,
+				chkStyle: "checkbox",
+				chkboxType: { "Y": "p", "N": "s" }
+			}
+		};
+	var zTree;
+	$.get("/role/"+[[${role.id}]]+"/getPermission", function(r){
+		zTree = $.fn.zTree.init($(".ztree"), setting, r);
+		zTree.expandAll(true);
+	});         
+	         
+	var ids = [];
+	function savePermission(){     
+	    var selectedIds = zTree.getCheckedNodes(true);
+	    $.each(selectedIds,function(i,n){
+	    	ids.push(n.id);
+	    });
+	     $.ajax({
+	        type : "POST",
+	        url : '/role/savePermission',
+	        data : {"roleId":[[${role.id}]],"resourceIds":ids},
+	        
+	        beforeSend : function() {
+	            index = layer.load();
+	        },
+	        success : function(resultdata) {
+	        	console.log(resultdata);
+	            if (resultdata.status) {
+	                layer.msg(resultdata.message, {
+	                    icon : 1,
+	                    end:function(){
+	                    	parent.layer.closeAll();
+	                    }
+	                });
+	                
+	                loadPage('role/listUI');
+	            } else {
+	                layer.msg(resultdata.message, {
+	                    icon : 5
+	                });
+	            }
+	        },
+	        error : function(data, errorMsg) {
+	            layer.close(index);
+	            layer.msg(data.responseText, {
+	                icon : 2
+	            });
+	        }
+	    }); 
+	}
+	</script>

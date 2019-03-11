@@ -1,6 +1,5 @@
 package com.wholesmart.controller;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,17 +63,16 @@ public class SwaggerConfig extends WebMvcConfigurationSupport{
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
 				//页面标题
-				.title("心肺运动功能评估系统接口管理")
+				.title("危险道路智能预警系统接口管理")
 				//创建人
-				.contact(new Contact("kangming.ning", "", "ningkangming@126.com"))
+				.contact(new Contact("kangming.ning", "", "ningkm@whole-smart.com"))
 				//版本号
 				.version("1.0")
 				//描述
-				.description("心肺运动功能评估系统接口")
+				.description("危险道路智能预警系统接口")
 				.build();
 	}
 
 
 }
-
 
